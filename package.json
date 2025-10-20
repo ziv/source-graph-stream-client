@@ -12,6 +12,11 @@
     "Stream",
     "API"
   ],
+  "files": [
+    "source-graph-client.js",
+    "source-graph-client.d.ts",
+    "readme.md"
+  ],
   "author": "Ziv Perry",
   "license": "MIT",
   "devDependencies": {

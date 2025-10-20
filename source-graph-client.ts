@@ -1,11 +1,29 @@
+/**
+ * Options for configuring the SourceGraphClient.
+ */
 export type SourceGraphClientOptions = {
+    /**
+     * The base URL of the Sourcegraph instance.
+     * @example "https://example.sourcegraph,com/.api/search/stream"
+     */
     url: string;
+
+    /**
+     * The authentication token for accessing the Sourcegraph API.
+     */
     token: string;
+
+    /**
+     * Optional fetch request initialization options.
+     */
     init?: RequestInit;
 };
 
+/**
+ * A single search result from Sourcegraph.
+ */
 export type SearchResult = {
-    type: 'content' | 'path' | 'repo';
+    type: "content" | "path" | "repo";
     path: string;
     repositoryID: number;
     repository: string;
@@ -23,59 +41,69 @@ export type SearchResult = {
     [key: string]: unknown;
 };
 
-export type SearchEvent = {
-    event: string;
-    data: unknown;
-};
+/**
+ * Message separator for SSE.
+ */
+const SEP = "\n\n";
 
-function processChunk(chunk: string): SearchEvent {
-    // event line and data line
-    const [ev, dt] = chunk.split('\n');
+/**
+ * Client for interacting querying Sourcegraph's search streaming API.
+ */
+export class SourceGraphClient {
+    readonly headers: Headers;
 
-    if (!ev.startsWith('event:')) {
-        throw new Error('unable to process chunk, missing event line');
+    constructor(readonly options: SourceGraphClientOptions) {
+        this.headers = new Headers(options?.init?.headers || []);
+        this.headers.set("Accept", "text/event-stream");
+        this.headers.set("Authorization", `token ${options.token}`);
     }
-    if (!dt.startsWith('data:')) {
-        throw new Error('unable to process chunk, missing data line');
-    }
 
-    const event = ev.replace('event:', '').trim();
-    const data = dt.replace('data:', '').trim();
+    /**
+     * Search Sourcegraph with the given query.
+     * Returns an async generator yielding search results as they are received.
+     *
+     * @example
+     * ```ts
+     * const client = new SourceGraphClient({
+     *      url: "https://example.sourcegraph.com/.api/search/stream",
+     *      token: "your-token
+     *  });
+     *
+     *  for await (const result of client.search("search-term")) {
+     *      console.log(result);
+     *  }
+     *
+     * ```
+     *
+     * @param query
+     */
+    async* search(query: string): AsyncGenerator<SearchResult> {
+        const init = this.options.init ?? {};
+        init.headers = this.headers;
 
-    return {
-        event,
-        data: JSON.parse(data),
-    };
-}
-
-export function createSourceGraphClient(options: SourceGraphClientOptions) {
-
-    const headers = new Headers(options?.init?.headers || []);
-    headers.set('Accept', 'text/event-stream');
-    headers.set('Authorization', `token ${options.token}`);
-
-    return async function* search(query: string): AsyncGenerator<SearchEvent> {
-        const init = options.init ?? {};
-        init.headers = headers;
-
-        const res = await fetch(`${options.url}?q=${encodeURIComponent(query)}`, init);
+        const res = await fetch(
+            `${this.options.url}?q=${encodeURIComponent(query)}`,
+            init,
+        );
 
         if (!res.ok) {
-            throw Error(`Unable to fetch from Sourcegraph: ${res.status} ${res.statusText}`);
+            throw Error(
+                `Unable to fetch from Sourcegraph: ${res.status} ${res.statusText}`,
+            );
         }
 
         if (!res.body) {
-            throw Error('Missing body in Sourcegraph response');
+            throw Error("Missing body in Sourcegraph response");
         }
 
         const decoder = new TextDecoder();
-        let raw = '';
+        let raw = "";
 
         for await (const chunk of res.body) {
             raw += decoder.decode(chunk);
-            
-            while (raw.includes('\n\n')) {
-                const index = (raw.indexOf('\n\n') + 2) as number; // position after the double newlines
+
+            while (raw.includes(SEP)) {
+                const index = (raw.indexOf(SEP) + 2) as number; // position after the double newlines
                 const part = raw.slice(0, index).trim() as string;
                 raw = raw.slice(index); // .trim();
 
@@ -83,7 +111,41 @@ export function createSourceGraphClient(options: SourceGraphClientOptions) {
                     continue; // skip empty events
                 }
 
-                yield processChunk(part);
+                const [ev, dt] = chunk.split("\n");
+
+                if (!ev.startsWith("event:")) {
+                    console.error(`Unable to process chunk, missing event line`);
+                    continue;
+                }
+
+                if (!dt.startsWith("data:")) {
+                    console.error("unable to process chunk, missing data line");
+                    continue;
+                }
+
+                const event = ev.replace("event:", "").trim();
+
+                if (event === "done") {
+                    return;
+                }
+
+                if (event !== "matches") {
+                    continue; // skip non-matches events
+                }
+
+                const data = dt.replace("data:", "").trim();
+                let results: SearchResult[];
+
+                try {
+                    results = JSON.parse(data) as SearchResult[];
+                } catch (error) {
+                    console.error("unable to parse chunk data as JSON", error);
+                    continue;
+                }
+
+                for (const result of results) {
+                    yield result;
+                }
             }
         }
     }
