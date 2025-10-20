@@ -3,6 +3,7 @@
   "description": "Client for streaming search results from Sourcegraph's API",
   "version": "0.0.3",
   "type": "module",
+  "types": "./source-graph-client.d.ts",
   "exports": {
     ".": "./source-graph-client.js"
   },
