@@ -111,7 +111,7 @@ export class SourceGraphClient {
           continue; // skip empty events
         }
 
-        const [ev, dt] = chunk.split("\n");
+        const [ev, dt] = part.split("\n");
 
         if (!ev.startsWith("event:")) {
           console.error(`Unable to process chunk, missing event line`);
