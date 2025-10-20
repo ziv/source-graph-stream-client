@@ -11,11 +11,11 @@ npm i source-graph-stream-client
 Create a client with your SourceGraph instance URL and access token:
 
 ```ts
-import {SourceGraphClient} from "source-graph-stream-client";
+import { SourceGraphClient } from "source-graph-stream-client";
 
 const client = new SourceGraphClient({
-    url: "https://example.sourcegraph.com/.api/search/stream",
-    token: 'your-access-token',
+  url: "https://example.sourcegraph.com/.api/search/stream",
+  token: "your-access-token",
 });
 ```
 

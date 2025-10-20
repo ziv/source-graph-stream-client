@@ -1,14 +1,14 @@
-import { createSourceGraphClient } from "./source-graph-client.js";
+import { SourceGraphClient } from "./source-graph-client.js";
 
 const token = process.env.SOURCEGRAPH_API_KEY as string;
 const url = process.env.SOURCEGRAPH_API_URL as string;
 
-const search = createSourceGraphClient({
+const client = new SourceGraphClient({
   url,
   token,
 });
 
-for await (const ev of search("perry")) {
+for await (const ev of client.search("perry")) {
   console.log(
     ev.event,
     ev.data,
