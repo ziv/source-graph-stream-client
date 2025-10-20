@@ -73,12 +73,7 @@ export function createSourceGraphClient(options: SourceGraphClientOptions) {
 
         for await (const chunk of res.body) {
             raw += decoder.decode(chunk);
-            // console.log(decoder.decode(chunk));
-
-
-            // console.log('\n--- chunk ---\n');
-            //
-            // // each message is separated by double newlines
+            
             while (raw.includes('\n\n')) {
                 const index = (raw.indexOf('\n\n') + 2) as number; // position after the double newlines
                 const part = raw.slice(0, index).trim() as string;
@@ -88,16 +83,8 @@ export function createSourceGraphClient(options: SourceGraphClientOptions) {
                     continue; // skip empty events
                 }
 
-                // console.log(part);
-                // console.log('\n--- end chunk ---\n');
-
                 yield processChunk(part);
             }
         }
-
-        // we have leftover data without double newlines
-        // if (raw.includes('event:') && raw.includes('\ndata:')) {
-        //     yield processChunk(raw);
-        // }
     }
 }
