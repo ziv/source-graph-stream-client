@@ -1,10 +1,10 @@
 {
   "name": "source-graph-stream-client",
-  "version": "0.0.0",
+  "description": "Client for streaming search results from Sourcegraph's API",
+  "version": "0.0.1",
   "type": "module",
-  "exports": "./index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "exports": {
+    ".": "./source-graph-client.js"
   },
   "keywords": [
     "Sourcegraph",
@@ -13,8 +13,7 @@
     "API"
   ],
   "author": "Ziv Perry",
-  "license": "ISC",
-  "description": "",
+  "license": "MIT",
   "devDependencies": {
     "@dotenvx/dotenvx": "^1.51.0",
     "@tsconfig/node24": "^24.0.1",
