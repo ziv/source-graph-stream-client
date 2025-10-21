@@ -12,21 +12,29 @@ Install the package:
 npm i source-graph-stream-client
 ```
 
+### Creating a client
+
 Create a client with your SourceGraph instance URL and access token:
 
 ```ts
-import { SourceGraphClient } from "source-graph-stream-client";
+import {SourceGraphClient} from "source-graph-stream-client";
 
 const client = new SourceGraphClient({
-  url: "https://example.sourcegraph.com/.api/search/stream",
-  token: "your-access-token",
+    url: "https://example.sourcegraph.com/.api/search/stream",
+    token: "your-access-token",
 });
 ```
+
+See the [SourceGraphClientOptions](./source-graph-client.ts) type for all available configuration options.
+
+### Streaming search results
 
 Stream search results using for-await-of:
 
 ```ts
 for await (const result of client.search("your search query")) {
-  console.log(result);
+    console.log(result);
 }
 ```
+
+See the [SearchOptions](./source-graph-client.ts) type for all available search options.
