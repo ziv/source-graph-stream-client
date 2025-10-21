@@ -4,6 +4,8 @@ Implements a client for streaming search results from a SourceGraph instance.
 
 https://sourcegraph.com/docs/api/stream_api
 
+[![auto-release](https://github.com/ziv/source-graph-stream-client/actions/workflows/ci.yml/badge.svg)](https://github.com/ziv/source-graph-stream-client/actions/workflows/ci.yml)
+
 ## Usage
 
 Install the package:
