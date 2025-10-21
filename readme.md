@@ -21,7 +21,7 @@ import {SourceGraphClient} from "source-graph-stream-client";
 
 const client = new SourceGraphClient({
     url: "https://example.sourcegraph.com/.api/search/stream",
-    token: "your-access-token",
+    accessToken: "your-access-token",
 });
 ```
 
