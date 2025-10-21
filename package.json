@@ -18,12 +18,21 @@
     "source-graph-client.d.ts",
     "readme.md"
   ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "author": "Ziv Perry",
   "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
   "devDependencies": {
     "@dotenvx/dotenvx": "^1.51.0",
     "@tsconfig/node24": "^24.0.1",
     "@types/node": "^24.8.1",
+    "semantic-release": "^25.0.1",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   }
