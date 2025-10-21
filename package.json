@@ -28,6 +28,11 @@
   "scripts": {
     "build": "tsc"
   },
+  "homepage": "https://github.com/ziv/source-graph-stream-client",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ziv/source-graph-stream-client.git"
+  },
   "devDependencies": {
     "@dotenvx/dotenvx": "^1.51.0",
     "@tsconfig/node24": "^24.0.1",
