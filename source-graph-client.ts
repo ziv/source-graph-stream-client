@@ -1,3 +1,5 @@
+import {SseStreamTransform} from "sse-stream-transform";
+
 /**
  * Options for configuring the SourceGraphClient.
  * @see https://sourcegraph.com/docs/api/stream_api
@@ -178,7 +180,7 @@ export class SourceGraphClient {
         }
 
         console.error(`${this.options.url}?${params.toString()}`);
-        const res = await fetch(
+        const res: Response = await fetch(
             `${this.options.url}?${params.toString()}`,
             init,
         );
@@ -193,56 +195,18 @@ export class SourceGraphClient {
             throw Error("Missing body in Sourcegraph response");
         }
 
-        const decoder = new TextDecoder();
-        let raw = "";
+        for await (const msg of res.body.pipeThrough(new SseStreamTransform())) {
+            if (msg.event !== "matches") {
+                continue;
+            }
 
-        for await (const chunk of res.body) {
-            raw += decoder.decode(chunk);
-
-            while (raw.includes(SEP)) {
-                const index = (raw.indexOf(SEP) + 2) as number;
-                const part = raw.slice(0, index).trim() as string;
-                raw = raw.slice(index);
-
-                if (!part) {
-                    continue;
-                }
-
-                const [ev, dt] = part.split("\n");
-
-                if (!ev.startsWith("event:")) {
-                    this.handleError("Unable to process chunk, missing event line");
-                    continue;
-                }
-
-                if (!dt.startsWith("data:")) {
-                    this.handleError("unable to process chunk, missing data line");
-                    continue;
-                }
-
-                const event = ev.replace("event:", "").trim();
-
-                if (event === "done") {
-                    return;
-                }
-
-                if (event !== "matches") {
-                    continue; // skip non-matches events
-                }
-
-                const data = dt.replace("data:", "").trim();
-                let results: SearchResult[];
-
-                try {
-                    results = JSON.parse(data) as SearchResult[];
-                } catch (error) {
-                    this.handleError("unable to parse chunk data as JSON: " + String(error));
-                    continue;
-                }
-
-                for (const result of results) {
-                    yield result;
-                }
+            try {
+                const results = JSON.parse(msg.data) as SearchResult[];
+                yield* results;
+            } catch (err) {
+                this.handleError(
+                    `Error parsing Sourcegraph search result: ${err}`,
+                );
             }
         }
     }
