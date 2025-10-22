@@ -1,7 +1,7 @@
 {
   "name": "source-graph-stream-client",
   "description": "Client for streaming search results from Sourcegraph's API",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "types": "./source-graph-client.d.ts",
   "exports": {
