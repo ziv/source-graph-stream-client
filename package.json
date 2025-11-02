@@ -3,6 +3,7 @@
   "description": "Client for streaming search results from Sourcegraph's API",
   "version": "0.0.0",
   "type": "module",
+  "main": "./source-graph-client.cjs",
   "types": "./source-graph-client.d.ts",
   "exports": {
     ".": "./source-graph-client.js"
@@ -14,6 +15,7 @@
     "API"
   ],
   "files": [
+    "source-graph-client.cjs",
     "source-graph-client.js",
     "source-graph-client.d.ts",
     "readme.md"
@@ -26,7 +28,7 @@
   "author": "Ziv Perry",
   "license": "MIT",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc && rollup source-graph-client.js --file source-graph-client.cjs --format cjs"
   },
   "homepage": "https://github.com/ziv/source-graph-stream-client",
   "repository": {
@@ -37,11 +39,12 @@
     "@dotenvx/dotenvx": "^1.51.0",
     "@tsconfig/node24": "^24.0.1",
     "@types/node": "^24.8.1",
-    "semantic-release": "^25.0.1",
+    "rollup": "^4.52.5",
+    "semantic-release": "^24.2.9",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "sse-stream-transform": "^0.0.1"
+    "sse-stream-transform": "^0.2.0"
   }
 }

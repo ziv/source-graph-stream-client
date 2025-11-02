@@ -31,6 +31,11 @@ export type SourceGraphClientOptions = {
      * Optional fetch request initialization options.
      */
     init?: RequestInit;
+
+    /**
+     * If true, will return all events and not only "matches" events.
+     */
+    // raw?: boolean;
 };
 
 /**
