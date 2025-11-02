@@ -46,5 +46,13 @@
   },
   "dependencies": {
     "sse-stream-transform": "^0.2.0"
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "@semantic-release/github"
+    ]
   }
 }

@@ -35,7 +35,7 @@ export type SourceGraphClientOptions = {
     /**
      * If true, will return all events and not only "matches" events.
      */
-    // raw?: boolean;
+    raw?: boolean;
 };
 
 /**
@@ -107,10 +107,6 @@ export type SearchResult = {
     [key: string]: unknown;
 };
 
-/**
- * Message separator for SSE.
- */
-const SEP = "\n\n";
 
 /**
  * Client for interacting querying Sourcegraph's search streaming API.
@@ -200,27 +196,30 @@ export class SourceGraphClient {
             throw Error("Missing body in Sourcegraph response");
         }
 
+        const safeParse = (data: unknown) => {
+            try {
+                return JSON.parse(data as string);
+            } catch {
+                return null;
+            }
+        }
+
         for await (const msg of res.body.pipeThrough(new SseStreamTransform())) {
             if (msg.event !== "matches") {
                 continue;
             }
 
-            try {
-                const results = JSON.parse(msg.data) as SearchResult[];
-                yield* results;
-            } catch (err) {
-                this.handleError(
-                    `Error parsing Sourcegraph search result: ${err}`,
-                );
-            }
-        }
-    }
+            const results = safeParse(msg.data) as SearchResult[];
+            if (!Array.isArray(results)) {
+                if (this.options.throwOnError) {
+                    throw new Error('Error parsing Sourcegraph search result');
+                }
+                // Skip invalid result
+                continue;
 
-    private handleError(error: string): void {
-        if (this.options.throwOnError) {
-            throw new Error(error);
+            }
+
+            yield* results;
         }
-        // todo should we yield an error event instead?
-        console.error(error);
     }
 }
