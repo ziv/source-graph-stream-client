@@ -31,11 +31,6 @@ export type SourceGraphClientOptions = {
      * Optional fetch request initialization options.
      */
     init?: RequestInit;
-
-    /**
-     * If true, will return all events and not only "matches" events.
-     */
-    raw?: boolean;
 };
 
 /**
@@ -134,7 +129,7 @@ export class SourceGraphClient {
      * ```ts
      * const client = new SourceGraphClient({
      *      url: "https://example.sourcegraph.com/.api/search/stream",
-     *      token: "your-token
+     *      accessToken: "your-token
      *  });
      *
      *  for await (const result of client.search("search-term")) {

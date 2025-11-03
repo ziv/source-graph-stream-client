@@ -27,6 +27,16 @@ const client = new SourceGraphClient({
 });
 ```
 
+#### Construction options
+
+| Option         | Type          | Description                                                            | Default      |
+|----------------|---------------|------------------------------------------------------------------------|--------------|
+| `url`          | `string`      | The SourceGraph instance search stream endpoint.                       | **required** |
+| `accessToken`  | `string`      | The access token for authentication. Can not use with `oauthToken`     | `undefined`  |
+| `oauthToken`   | `string`      | The OAuth token for authentication. Can not use with `accessToken`     | `undefined`  |
+| `throwOnError` | `boolean`     | Whether to throw an error for fail to parse a message or just skip it. | `false`      |
+| `init`         | `RequestInit` | Additional fetch options to use when making requests.                  | `undefined`  |
+
 See the [SourceGraphClientOptions](./source-graph-client.ts) type for all available configuration options.
 
 ### Streaming search results
