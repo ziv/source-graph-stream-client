@@ -27,7 +27,9 @@ const client = new SourceGraphClient({
 });
 ```
 
-#### Construction options
+#### Client Options
+
+    The minimal required options are `url` and either `accessToken` or `oauthToken`.
 
 | Option         | Type          | Description                                                            | Default      |
 |----------------|---------------|------------------------------------------------------------------------|--------------|
@@ -37,7 +39,7 @@ const client = new SourceGraphClient({
 | `throwOnError` | `boolean`     | Whether to throw an error for fail to parse a message or just skip it. | `false`      |
 | `init`         | `RequestInit` | Additional fetch options to use when making requests.                  | `undefined`  |
 
-See the [SourceGraphClientOptions](./source-graph-client.ts) type for all available configuration options.
+---
 
 ### Streaming search results
 
@@ -46,6 +48,14 @@ Stream search results using for-await-of:
 ```ts
 for await (const result of client.search("your search query")) {
     console.log(result);
+}
+```
+
+### Using search options
+
+```ts
+for await (const results of client.search("query", {displayLimit: 10})) {
+    console.log(results);
 }
 ```
 
