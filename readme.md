@@ -60,3 +60,13 @@ for await (const results of client.search("query", {displayLimit: 10})) {
 ```
 
 See the [SearchOptions](./source-graph-client.ts) type for all available search options.
+
+### Streaming all SourceGraph search events
+
+You can also stream all SourceGraph events (not just search results) using the `raw` method:
+
+```ts
+for await (const event of client.raw("your search query")) {
+    console.log(event);
+}
+```

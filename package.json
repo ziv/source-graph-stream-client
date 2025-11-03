@@ -28,6 +28,7 @@
   "author": "Ziv Perry",
   "license": "MIT",
   "scripts": {
+    "test": "tsx --test",
     "build": "tsc && rollup source-graph-client.js --file source-graph-client.cjs --format cjs"
   },
   "homepage": "https://github.com/ziv/source-graph-stream-client",
@@ -45,7 +46,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "sse-stream-transform": "^0.2.0"
+    "sse-stream-transform": "^0.3.0"
   },
   "release": {
     "plugins": [

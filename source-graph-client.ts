@@ -1,4 +1,6 @@
-import {SseStreamTransform} from "sse-stream-transform";
+import {type SSEMessage, SseStreamTransform} from "sse-stream-transform";
+
+export {type SSEMessage};
 
 /**
  * Options for configuring the SourceGraphClient.
@@ -102,6 +104,17 @@ export type SearchResult = {
     [key: string]: unknown;
 };
 
+/**
+ * Safely parse JSON data, returning null on failure.
+ * @param data
+ */
+const safeParse = <T>(data: unknown) => {
+    try {
+        return JSON.parse(data as string) as T;
+    } catch {
+        return null;
+    }
+}
 
 /**
  * Client for interacting querying Sourcegraph's search streaming API.
@@ -145,6 +158,56 @@ export class SourceGraphClient {
         query: string,
         options: SearchOptions = {},
     ): AsyncGenerator<SearchResult> {
+        const read = await this.stream(query, options);
+
+        for await (const msg of read.pipeThrough(new SseStreamTransform())) {
+            if (msg.event !== "matches") {
+                continue;
+            }
+
+            const results = safeParse(msg.data) as SearchResult[];
+            if (!Array.isArray(results)) {
+                if (this.options.throwOnError) {
+                    throw new Error('Error parsing Sourcegraph search result');
+                }
+                // Skip invalid result
+                continue;
+
+            }
+
+            yield* results;
+        }
+    }
+
+    /**
+     * Returns the raw SSE messages from Sourcegraph search API (stringify data parsed) and not only the search results.
+     *
+     * @param query
+     * @param options
+     */
+    async* raw(
+        query: string,
+        options: SearchOptions = {},
+    ): AsyncGenerator<SSEMessage> {
+        const read = await this.stream(query, options);
+        for await (const msg of read.pipeThrough(new SseStreamTransform())) {
+            if (msg.data) {
+                msg.data = safeParse(msg.data) ?? msg.data;
+            }
+            yield msg;
+        }
+    }
+
+    /**
+     * Create a readable stream from the Sourcegraph search API.
+     * @param query
+     * @param options
+     * @protected
+     */
+    protected async stream(
+        query: string,
+        options: SearchOptions = {},
+    ): Promise<ReadableStream<Uint8Array>> {
         const init = this.options.init ?? {};
         init.headers = this.headers;
 
@@ -191,30 +254,6 @@ export class SourceGraphClient {
             throw Error("Missing body in Sourcegraph response");
         }
 
-        const safeParse = (data: unknown) => {
-            try {
-                return JSON.parse(data as string);
-            } catch {
-                return null;
-            }
-        }
-
-        for await (const msg of res.body.pipeThrough(new SseStreamTransform())) {
-            if (msg.event !== "matches") {
-                continue;
-            }
-
-            const results = safeParse(msg.data) as SearchResult[];
-            if (!Array.isArray(results)) {
-                if (this.options.throwOnError) {
-                    throw new Error('Error parsing Sourcegraph search result');
-                }
-                // Skip invalid result
-                continue;
-
-            }
-
-            yield* results;
-        }
+        return res.body;
     }
 }
