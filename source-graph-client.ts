@@ -238,7 +238,6 @@ export class SourceGraphClient {
             params.append("cl", options.contextLines.toString());
         }
 
-        console.error(`${this.options.url}?${params.toString()}`);
         const res: Response = await fetch(
             `${this.options.url}?${params.toString()}`,
             init,
