@@ -19,11 +19,11 @@ npm i source-graph-stream-client
 Create a client with your SourceGraph instance URL and access token:
 
 ```ts
-import {SourceGraphClient} from "source-graph-stream-client";
+import { SourceGraphClient } from "source-graph-stream-client";
 
 const client = new SourceGraphClient({
-    url: "https://example.sourcegraph.com/.api/search/stream",
-    accessToken: "your-access-token",
+  url: "https://example.sourcegraph.com/.api/search/stream",
+  accessToken: "your-access-token",
 });
 ```
 
@@ -32,7 +32,7 @@ const client = new SourceGraphClient({
     The minimal required options are `url` and either `accessToken` or `oauthToken`.
 
 | Option         | Type          | Description                                                            | Default      |
-|----------------|---------------|------------------------------------------------------------------------|--------------|
+| -------------- | ------------- | ---------------------------------------------------------------------- | ------------ |
 | `url`          | `string`      | The SourceGraph instance search stream endpoint.                       | **required** |
 | `accessToken`  | `string`      | The access token for authentication. Can not use with `oauthToken`     | `undefined`  |
 | `oauthToken`   | `string`      | The OAuth token for authentication. Can not use with `accessToken`     | `undefined`  |
@@ -47,26 +47,28 @@ Stream search results using for-await-of:
 
 ```ts
 for await (const result of client.search("your search query")) {
-    console.log(result);
+  console.log(result);
 }
 ```
 
 ### Using search options
 
 ```ts
-for await (const results of client.search("query", {displayLimit: 10})) {
-    console.log(results);
+for await (const results of client.search("query", { displayLimit: 10 })) {
+  console.log(results);
 }
 ```
 
-See the [SearchOptions](./source-graph-client.ts) type for all available search options.
+See the [SearchOptions](./source-graph-client.ts) type for all available search
+options.
 
 ### Streaming all SourceGraph search events
 
-You can also stream all SourceGraph events (not just search results) using the `raw` method:
+You can also stream all SourceGraph events (not just search results) using the
+`raw` method:
 
 ```ts
 for await (const event of client.raw("your search query")) {
-    console.log(event);
+  console.log(event);
 }
 ```
