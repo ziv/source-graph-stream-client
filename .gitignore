@@ -5,3 +5,5 @@ tmp
 **/*.d.ts
 **/*.cjs
 .env
+.claude
+CLAUDE.md
