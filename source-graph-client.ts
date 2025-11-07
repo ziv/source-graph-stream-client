@@ -125,6 +125,26 @@ export type RepoSearchResult = {
 
 export type PathSearchResult = {
     type: "path";
+    path: string;
+    pathMatches: {
+        start: {
+            offset: number;
+            line: number;
+            column: number;
+        };
+        end: {
+            offset: number;
+            line: number;
+            column: number;
+        };
+    };
+    repositoryID: number;
+    repository: string;
+    repoStars?: number;
+    repoLastFetched: string;
+    branches: string[];
+    commit: string;
+    language: string;
     [key: string]: unknown;
 }
 
