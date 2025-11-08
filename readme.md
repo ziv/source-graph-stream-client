@@ -45,6 +45,7 @@ The minimal required options are `url` and either `accessToken` or `oauthToken`.
 | `throwOnError` | `boolean`     | Whether to throw an error for fail to parse a message or just skip it. | `false`      |
 | `init`         | `RequestInit` | Additional fetch options to use when making requests.                  | `undefined`  |
 
+See [options](./source-graph-client.ts#L9-L36) definition for more details
 ---
 
 ### Streaming search results
@@ -65,7 +66,7 @@ for await (const result of client.search("query", {displayLimit: 10})) {
 }
 ```
 
-See the [SearchOptions](./source-graph-client.ts) type for all available search
+See the [SearchOptions](./source-graph-client.ts#L42-L83) type for all available search
 options.
 
 ### Exported Search Result Types
