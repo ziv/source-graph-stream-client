@@ -46,7 +46,8 @@ The minimal required options are `url` and either `accessToken` or `oauthToken`.
 | `init`         | `RequestInit` | Additional fetch options to use when making requests.                  | `undefined`  |
 
 See [options](./source-graph-client.ts#L9-L36) definition for more details
----
+
+--
 
 ### Streaming search results
 
