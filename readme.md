@@ -6,6 +6,8 @@ Implements a client for streaming search results from a SourceGraph instance,
 async generators for the search results, and support for authentication via
 access tokens or OAuth tokens.
 
+[Sourcegraph Stream API](https://sourcegraph.com/docs/api/stream_api)
+
 Battle-tested in production environments.
 
 [![auto-release](https://github.com/ziv/source-graph-stream-client/actions/workflows/ci.yml/badge.svg)](https://github.com/ziv/source-graph-stream-client/actions/workflows/ci.yml)
