@@ -8,6 +8,9 @@ const client = new SourceGraphClient({
   accessToken,
 });
 
-for await (const ev of client.search("@angular/core/testing")) {
-  console.log(ev);
+const query = "testing";
+const options = { displayLimit: 10 };
+
+for await (const searchResult of client.search(query, options)) {
+  console.log("Search result:", searchResult);
 }
