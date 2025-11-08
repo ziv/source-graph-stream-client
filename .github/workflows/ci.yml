@@ -47,6 +47,9 @@ jobs:
       - name: 🔑 dependencies
         run: npm ci --no-fund
 
+      - name: 🧪 test
+        run: npm test
+
       - name: 🌈 build
         run: npm run build
 
