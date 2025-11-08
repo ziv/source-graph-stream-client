@@ -60,13 +60,23 @@ for await (const result of client.search("your search query")) {
 ### Using search options
 
 ```ts
-for await (const results of client.search("query", {displayLimit: 10})) {
-    console.log(results);
+for await (const result of client.search("query", {displayLimit: 10})) {
+    console.log(result);
 }
 ```
 
 See the [SearchOptions](./source-graph-client.ts) type for all available search
 options.
+
+### Exported Search Result Types
+
+The client exports the following search result types:
+
+- `ContentSearchResult` - represents a result from a file content.
+- `RepoSearchResult` - represents a result from a repository name/path.
+- `PathSearchResult` - represents a result from a file/directory path.
+
+See the [types](./source-graph-client.ts#L85-L149) definitions for more details.
 
 ### Streaming all SourceGraph search events
 
