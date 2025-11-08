@@ -7,7 +7,7 @@ on:
       - main
 
 #permissions:
-#  #  contents: read # for checkout
+#  contents: read # for checkout
 #  contents: write # to be able to publish a GitHub release
 #  issues: write # to be able to comment on released issues
 #  pull-requests: write # to be able to comment on released pull requests
@@ -36,13 +36,13 @@ jobs:
         with:
           node-version: 24
 
-      #      - name: Cache npm dependencies
-      #        uses: actions/cache@v4
-      #        with:
-      #          path: ~/.npm
-      #          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-      #          restore-keys: |
-      #            ${{ runner.os }}-npm-
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
 
       - name: 🔑 dependencies
         run: npm ci --no-fund
