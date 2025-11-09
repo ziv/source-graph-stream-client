@@ -46,7 +46,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "sse-stream-transform": "^0.3.0"
+    "sse-stream-transform": "^1.0.0"
   },
   "release": {
     "plugins": [
