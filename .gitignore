@@ -2,6 +2,7 @@
 node_modules
 tmp
 **/*.js
+!docs/*.js
 **/*.d.ts
 **/*.cjs
 .env
