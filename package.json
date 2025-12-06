@@ -53,5 +53,8 @@
       "@semantic-release/npm",
       "@semantic-release/github"
     ]
+  },
+  "typedocOptions": {
+    "hostedBaseUrl": "https://ziv.github.io/source-graph-stream-client/"
   }
 }
