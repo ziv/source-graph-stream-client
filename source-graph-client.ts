@@ -106,6 +106,7 @@ export type ContentSearchResult = {
   }[];
   [key: string]: unknown;
 };
+
 export type RepoSearchResult = {
   type: "repo";
   repositoryID: number;
