@@ -46,7 +46,7 @@ The minimal required options are `url` and either `accessToken` or `oauthToken`.
 | `throwOnError` | `boolean`     | Whether to throw an error for fail to parse a message or just skip it. | `false`      |
 | `init`         | `RequestInit` | Additional fetch options to use when making requests.                  | `undefined`  |
 
-See the [options](./source-graph-client.ts#L11-L42) definition for more details
+See the [options](./source-graph-client.ts#L15-L42) definition for more details
 
 ---
 
@@ -68,7 +68,7 @@ for await (const result of client.search("query", {displayLimit: 10})) {
 }
 ```
 
-See the [SearchOptions](./source-graph-client.ts#L44-L89) type for all available search options.
+See the [SearchOptions](./source-graph-client.ts#L48-L89) type for all available search options.
 
 ### Exported Search Result Types
 
@@ -78,7 +78,7 @@ The client exports the following search result types:
 - `RepoSearchResult` - represents a result from a repository name/path.
 - `PathSearchResult` - represents a result from a file/directory path.
 
-See the [types](./source-graph-client.ts#L91-L155) definitions for more details.
+See the [types](./source-graph-client.ts#L91-L156) definitions for more details.
 
 ### Streaming all SourceGraph search events
 
